@@ -1,7 +1,10 @@
 import { interval, forkJoin, of } from 'rxjs';
 import { delay, take } from 'rxjs/operators';
+import { ajax } from 'rxjs/ajax';
 
-const myPromise = (val) =>
+// https://www.learnrxjs.io/learn-rxjs/operators/combination/forkjoin
+
+const samplePromise = (val) =>
   new Promise((resolve) =>
     setTimeout(() => resolve(`Promise Resolved: ${val}`), 5000)
   );
@@ -15,21 +18,17 @@ const example = forkJoin({
   first: of('Hello'),
   //emit 'World' after 1 second
   second: of('World').pipe(delay(1000)),
-  //emit 0 after 1 second
-  sourceThree: interval(1000).pipe(take(1)),
+
+  src_3: interval(2000).pipe(take(1)),
   //emit 0...1 in 1 second interval
-  sourceFour: interval(1000).pipe(take(2)),
+  src_4: interval(1000).pipe(take(2)),
   //promise that resolves to 'Promise Resolved' after 5 seconds
-  sourceFive: myPromise('RESULT'),
+  src_5: samplePromise('FIN res'),
+  src_6: {
+    google: ajax.getJSON('https://api.github.com/users/google'),
+    microsoft: ajax.getJSON('https://api.github.com/users/microsoft'),
+    users: ajax.getJSON('https://api.github.com/users'),
+  },
 });
-/*
- * Output:
- * {
- *   sourceOne: "Hello",
- *   sourceTwo: "World",
- *   sourceThree: 0,
- *   sourceFour: 1,
- *   sourceFive: "Promise Resolved: RESULT"
- * }
- */
+
 const subscribe = example.subscribe((val) => console.log(val));
