@@ -24,11 +24,10 @@ const example = forkJoin({
   src_4: interval(1000).pipe(take(2)),
   //promise that resolves to 'Promise Resolved' after 5 seconds
   src_5: samplePromise('FIN res'),
-  src_6: {
-    google: ajax.getJSON('https://api.github.com/users/google'),
-    microsoft: ajax.getJSON('https://api.github.com/users/microsoft'),
-    users: ajax.getJSON('https://api.github.com/users'),
-  },
+
+  google: ajax.getJSON('https://api.github.com/users/google'),
+  microsoft: ajax.getJSON('https://api.github.com/users/microsoft'),
+  users: ajax.getJSON('https://api.github.com/users'),
 });
 
 const subscribe = example.subscribe((val) => console.log(val));
